@@ -1,4 +1,4 @@
-package services
+package rate_providers
 
 import (
 	"SE_School/models"
@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-type BtcService struct {
+type CoindeskRateProvider struct {
 }
 
-func (serv *BtcService) GetBtcRate() (*models.BitcoinRate, error) {
+func (provider *CoindeskRateProvider) GetRate() (*models.BitcoinRate, error) {
 	// Getting data from external resource
 	resp, err := http.Get("https://api.coindesk.com/v1/bpi/currentprice/UAH.json")
 	if err != nil {

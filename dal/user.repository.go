@@ -14,6 +14,8 @@ type FileRepository struct {
 	//Mutex to protect io operations from concurrency errors
 	mu    sync.Mutex
 	users []models.User
+
+	FileLocation string
 }
 
 func (repo *FileRepository) Add(user models.User) error {
@@ -26,7 +28,7 @@ func (repo *FileRepository) Add(user models.User) error {
 	}
 
 	//Open file for read, write, append and create file if it doesn't exist
-	file, err := os.OpenFile("users.data", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	file, err := os.OpenFile(repo.FileLocation, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
@@ -69,7 +71,7 @@ func (repo *FileRepository) readUsers() error {
 		return nil
 	}
 
-	file, err := os.OpenFile("users.data", os.O_RDONLY, 0666)
+	file, err := os.OpenFile(repo.FileLocation, os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}

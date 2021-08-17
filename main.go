@@ -4,6 +4,7 @@ import (
 	"SE_School/controllers"
 	"SE_School/dal"
 	"SE_School/middleware"
+	"SE_School/rate_providers"
 	"SE_School/services"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -19,9 +20,9 @@ func main() {
 	}
 
 	//Dependency Injection
-	userServ := services.UserService{Repo: &dal.FileRepository{}}
+	userServ := services.UserService{Repo: &dal.FileRepository{FileLocation: "users.data"}}
 	controllers.UserServ = &userServ
-	controllers.BtcServ = &services.BtcService{}
+	controllers.BtcServ = &services.BtcService{RateProvider: &rate_providers.CoindeskRateProvider{}}
 	controllers.AuthServ = &services.AuthService{}
 
 	router := mux.NewRouter()
