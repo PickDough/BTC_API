@@ -1,13 +1,4 @@
-package models
-
-type User struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type Token struct {
-	Token string `json:"token"`
-}
+package domain
 
 type BitcoinRate struct {
 	Time     string   `json:"time"`

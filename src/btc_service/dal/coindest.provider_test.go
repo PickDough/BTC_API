@@ -1,4 +1,4 @@
-package rate_providers
+package dal
 
 import "testing"
 

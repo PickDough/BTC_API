@@ -1,7 +1,7 @@
-package rate_providers
+package dal
 
 import (
-	"SE_School/models"
+	"BTC_Service/domain"
 	"encoding/json"
 	"net/http"
 )
@@ -9,7 +9,7 @@ import (
 type CoindeskRateProvider struct {
 }
 
-func (provider *CoindeskRateProvider) GetRate() (*models.BitcoinRate, error) {
+func (provider *CoindeskRateProvider) GetRate() (*domain.BitcoinRate, error) {
 	// Getting data from external resource
 	resp, err := http.Get("https://api.coindesk.com/v1/bpi/currentprice/UAH.json")
 	if err != nil {
@@ -22,7 +22,7 @@ func (provider *CoindeskRateProvider) GetRate() (*models.BitcoinRate, error) {
 		return nil, err
 	}
 
-	btcRate := &models.BitcoinRate{}
+	btcRate := &domain.BitcoinRate{}
 
 	btcRate.Time = btcInfo["time"].(map[string]interface{})["updated"].(string)
 	uah := btcInfo["bpi"].(map[string]interface{})["UAH"].(map[string]interface{})

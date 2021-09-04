@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  docker-api-gateway:
+    depends_on:
+      - docker-btc-service
+      - docker-user-service
+    build:
+      context: ./src/api_gw/
+    container_name: api-gw
+    ports:
+      - "6666:6666"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+
+  docker-btc-service:
+    build:
+      context: ./src/btc_service/
+    container_name: btc-service
+    ports:
+      - "7777:7777"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  docker-user-service:
+    build:
+      context: ./src/user_service/
+    container_name: user-service
+    ports:
+      - "8888:8888"
+    deploy:
+      restart_policy:
+        condition: on-failure

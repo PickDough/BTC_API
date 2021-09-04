@@ -1,11 +1,9 @@
 package main
 
 import (
-	"SE_School/controllers"
-	"SE_School/dal"
-	"SE_School/middleware"
-	"SE_School/rate_providers"
-	"SE_School/services"
+	"User_Service/controllers"
+	"User_Service/dal"
+	"User_Service/services"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -20,18 +18,13 @@ func main() {
 	}
 
 	//Dependency Injection
-	userServ := services.UserService{Repo: &dal.FileRepository{FileLocation: "users.data"}}
+	userServ := services.UserService{Repo: &dal.FileRepository{FileLocation: "user.data"}}
 	controllers.UserServ = &userServ
-	controllers.BtcServ = &services.BtcService{RateProvider: &rate_providers.CoindeskRateProvider{}}
-	controllers.AuthServ = &services.AuthService{}
 
 	router := mux.NewRouter()
 	router.HandleFunc("/user/create", controllers.Create).Methods("POST")
 	router.HandleFunc("/user/login", controllers.Login).Methods("POST")
-	router.HandleFunc("/btcRate", controllers.Rate).Methods("GET")
 	http.Handle("/", router)
-
-	router.Use(middleware.JwtMiddleware)
 
 	port := os.Getenv("PORT")
 

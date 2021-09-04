@@ -7,18 +7,18 @@ import (
 	"strings"
 	"sync"
 
-	"SE_School/models"
+	"User_Service/domain"
 )
 
 type FileRepository struct {
 	//Mutex to protect io operations from concurrency errors
 	mu    sync.Mutex
-	users []models.User
+	users []domain.User
 
 	FileLocation string
 }
 
-func (repo *FileRepository) Add(user models.User) error {
+func (repo *FileRepository) Add(user domain.User) error {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
@@ -46,7 +46,7 @@ func (repo *FileRepository) Add(user models.User) error {
 	return nil
 }
 
-func (repo *FileRepository) Get(email string) (*models.User, error) {
+func (repo *FileRepository) Get(email string) (*domain.User, error) {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
@@ -99,7 +99,7 @@ func (repo *FileRepository) readUsers() error {
 		} else {
 			//Convert slice of bytes to string and split by empty space
 			userData := strings.Split(string(user), " ")
-			repo.users = append(repo.users, models.User{Email: userData[0], Password: userData[1]})
+			repo.users = append(repo.users, domain.User{Email: userData[0], Password: userData[1]})
 			user = nil
 		}
 	}

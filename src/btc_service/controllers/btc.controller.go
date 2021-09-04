@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"SE_School/models"
-	"SE_School/utils"
+	"BTC_Service/domain"
+	"BTC_Service/utils"
 	"net/http"
 )
 
 type BtcService interface {
-	GetBtcRate() (*models.BitcoinRate, error)
+	GetBtcRate() (*domain.BitcoinRate, error)
 }
 
 var BtcServ BtcService
