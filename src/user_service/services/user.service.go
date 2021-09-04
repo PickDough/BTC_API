@@ -1,21 +1,21 @@
 package services
 
 import (
-	"SE_School/models"
+	"User_Service/domain"
 	"errors"
 	"net/mail"
 )
 
 type UserRepository interface {
-	Add(u models.User) error
-	Get(email string) (*models.User, error)
+	Add(u domain.User) error
+	Get(email string) (*domain.User, error)
 }
 
 type UserService struct {
 	Repo UserRepository
 }
 
-func (service *UserService) AddUser(user models.User) error {
+func (service *UserService) AddUser(user domain.User) error {
 	exists, err := service.Repo.Get(user.Email)
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func (service *UserService) AddUser(user models.User) error {
 	return nil
 }
 
-func (service *UserService) LoginUser(user models.User) error {
+func (service *UserService) LoginUser(user domain.User) error {
 	userByEmail, err := service.Repo.Get(user.Email)
 
 	if err != nil {

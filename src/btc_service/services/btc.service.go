@@ -1,17 +1,17 @@
 package services
 
 import (
-	"SE_School/models"
+	"BTC_Service/domain"
 )
 
 type BtcRateProvider interface {
-	GetRate() (*models.BitcoinRate, error)
+	GetRate() (*domain.BitcoinRate, error)
 }
 
 type BtcService struct {
 	RateProvider BtcRateProvider
 }
 
-func (service *BtcService) GetBtcRate() (*models.BitcoinRate, error) {
+func (service *BtcService) GetBtcRate() (*domain.BitcoinRate, error) {
 	return service.RateProvider.GetRate()
 }

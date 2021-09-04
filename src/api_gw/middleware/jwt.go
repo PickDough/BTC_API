@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"SE_School/utils"
+	"Api_Gateway/utils"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
