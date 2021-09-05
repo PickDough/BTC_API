@@ -2,6 +2,13 @@
 
 У новій гілці  **microservices** було переписано проект з урахуваннням мікросервісної архітектури. Було виділено два мікросервіси: сервіс користувачів та сервіс ціни біткоїна. Проте клієнт безпосередньо працює з api-gateway, у якому відбувається автентифікація і подальше переправлення запитів.
 
+ Всі запити йдуть через http://localhost:6666 : 
+ * http://localhost:6666/btcRate [GET] Requires jwt.
+ * http://localhost:6666/user/create [POST]
+ * http://localhost:6666/user/login [POST]
+
+ Для зупуску у папці проекту в терміналі прописати ```docker-compose up --build```
+ 
 # Homework Update: UML Diagram
 
 Було додано 2 файли до папки *docs*:  **HW-4.drawio** та **HW-4.png** з діаграмою класів для застосунку "обмін валют". Telegram: @PickDough.
