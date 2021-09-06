@@ -1,12 +1,16 @@
 package middleware
 
 import (
+	"Api_Gateway/authentication"
 	"Api_Gateway/utils"
+	"bytes"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"log"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 func JwtMiddleware(next http.Handler) http.Handler {
@@ -18,7 +22,23 @@ func JwtMiddleware(next http.Handler) http.Handler {
 		for _, publicPath := range publicPaths {
 
 			if publicPath == requestPath {
-				next.ServeHTTP(w, r)
+				rw := &ResponseWriter{W: w, Buff: bytes.Buffer{}}
+				next.ServeHTTP(rw, r)
+
+				statusCode := rw.Code
+
+				if statusCode == 200 {
+					authServ := authentication.AuthService{}
+					token, _ := authServ.GenerateToken()
+					http.SetCookie(rw, &http.Cookie{Name: "token", Value: token.Token,
+						Expires: time.Now().Add(time.Minute * 15)})
+				} else {
+					rw.WriteHeader(400)
+				}
+
+				if _, err := rw.Done(); err != nil {
+					log.Println(err)
+				}
 				return
 			}
 		}

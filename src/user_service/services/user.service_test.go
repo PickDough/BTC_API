@@ -1,14 +1,14 @@
 package services
 
 import (
-	"SE_School/models"
-	"SE_School/tests/unit"
+	"User_Service/domain"
+	"User_Service/tests/unit"
 	"testing"
 )
 
 func TestUserService_AddUserWillNotAcceptInvalidEmail(t *testing.T) {
 	service := UserService{unit.NewInMemoryUserRepository()}
-	user := models.User{Email: "wrongEmail", Password: ""}
+	user := domain.User{Email: "wrongEmail", Password: ""}
 
 	err := service.AddUser(user)
 
@@ -19,7 +19,7 @@ func TestUserService_AddUserWillNotAcceptInvalidEmail(t *testing.T) {
 
 func TestUserService_AddUserWillNotAcceptUserWithRepeatingEmail(t *testing.T) {
 	service := UserService{unit.NewInMemoryUserRepository()}
-	user := models.User{Email: "test_email@abc.com", Password: ""}
+	user := domain.User{Email: "test_email@abc.com", Password: ""}
 
 	err := service.AddUser(user)
 
@@ -30,7 +30,7 @@ func TestUserService_AddUserWillNotAcceptUserWithRepeatingEmail(t *testing.T) {
 
 func TestUserService_LoginUserWillNotLoginUserWithNewEmail(t *testing.T) {
 	service := UserService{unit.NewInMemoryUserRepository()}
-	user := models.User{Email: "new_email@abc.com", Password: ""}
+	user := domain.User{Email: "new_email@abc.com", Password: ""}
 
 	err := service.LoginUser(user)
 
@@ -41,7 +41,7 @@ func TestUserService_LoginUserWillNotLoginUserWithNewEmail(t *testing.T) {
 
 func TestUserService_LoginUserWillNotLoginUserWithWrongPassword(t *testing.T) {
 	service := UserService{unit.NewInMemoryUserRepository()}
-	user := models.User{Email: "test_email@abc.com", Password: ""}
+	user := domain.User{Email: "test_email@abc.com", Password: ""}
 
 	err := service.LoginUser(user)
 

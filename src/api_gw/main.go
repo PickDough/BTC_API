@@ -3,11 +3,9 @@ package main
 import (
 	"Api_Gateway/authentication"
 	"Api_Gateway/middleware"
-	"Api_Gateway/utils"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	"github.com/urfave/negroni"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -67,15 +65,6 @@ func main() {
 
 func UserHandlerFunc(proxy *httputil.ReverseProxy, authServ authentication.AuthService) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		lrw := negroni.NewResponseWriter(w)
-
-		_, _ = w.Write([]byte(""))
-		proxy.ServeHTTP(lrw, r)
-		statusCode := lrw.Status()
-
-		if statusCode == 200 {
-			token, _ := authServ.GenerateToken()
-			utils.Respond(lrw, map[string]interface{}{"securityToken": token})
-		}
+		proxy.ServeHTTP(w, r)
 	}
 }

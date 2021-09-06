@@ -34,3 +34,7 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+    volumes:
+      - user-data:/user-service/data
+volumes:
+  user-data:

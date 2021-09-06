@@ -1,7 +1,7 @@
 package dal
 
 import (
-	"SE_School/models"
+	"User_Service/domain"
 	"os"
 	"testing"
 )
@@ -10,7 +10,7 @@ func TestFileRepository_AddWillCreateFile(t *testing.T) {
 	file := "users_tmp.data"
 	repo := FileRepository{FileLocation: file}
 
-	err := repo.Add(models.User{Email: "addTest", Password: "addTest"})
+	err := repo.Add(domain.User{Email: "addTest", Password: "addTest"})
 	if err != nil {
 		t.Errorf(err.Error())
 	}
@@ -28,7 +28,7 @@ func TestFileRepository_AddWillCreateFile(t *testing.T) {
 func TestFileRepository_GetWillReturnUserFromFile(t *testing.T) {
 	file := "users_tmp.data"
 	addRepo := FileRepository{FileLocation: file}
-	addUser := models.User{Email: "getTest", Password: "getTest"}
+	addUser := domain.User{Email: "getTest", Password: "getTest"}
 
 	err := addRepo.Add(addUser)
 	if err != nil {
