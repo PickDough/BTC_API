@@ -35,6 +35,7 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - user-data:/user-service/data
+      - user-data:/app
+
 volumes:
   user-data:

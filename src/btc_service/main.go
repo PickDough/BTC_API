@@ -3,6 +3,7 @@ package main
 import (
 	"BTC_Service/controllers"
 	"BTC_Service/dal"
+	"BTC_Service/message_broker"
 	"BTC_Service/services"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -19,6 +20,8 @@ func main() {
 
 	//Dependency Injection
 	controllers.BtcServ = &services.BtcService{RateProvider: &dal.CoindeskRateProvider{}}
+	controllers.MsgBroker = message_broker.CreateMessageBroker(os.Getenv("RABBIT_MQ"), os.Getenv("EXCHANGE"))
+	defer controllers.MsgBroker.Close()
 
 	router := mux.NewRouter()
 	router.HandleFunc("/btcRate", controllers.Rate).Methods("GET")

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Api_Gateway/authentication"
+	"Api_Gateway/message_receiver"
 	"Api_Gateway/middleware"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -43,16 +43,20 @@ func main() {
 		req.URL.Host = userServiceOrigin.Host
 	}
 
-	authService := authentication.AuthService{}
 	userProxy := &httputil.ReverseProxy{Director: userDirector}
-	router.HandleFunc("/user/login", UserHandlerFunc(userProxy, authService)).Methods("POST")
-	router.HandleFunc("/user/create", UserHandlerFunc(userProxy, authService)).Methods("POST")
+	router.HandleFunc("/user/login", UserHandlerFunc(userProxy)).Methods("POST")
+	router.HandleFunc("/user/create", UserHandlerFunc(userProxy)).Methods("POST")
 
 	http.Handle("/", router)
 
 	router.Use(middleware.JwtMiddleware)
 
 	port := os.Getenv("PORT")
+
+	receiver := message_receiver.CreateMessageReceiver(os.Getenv("RABBIT_MQ"), os.Getenv("EXCHANGE"))
+	defer receiver.Close()
+
+	go LogErrorMessages(receiver)
 
 	err := http.ListenAndServe(":"+port, nil)
 
@@ -63,8 +67,14 @@ func main() {
 	_, _ = fmt.Fprintln(os.Stdout, "Running on port: port")
 }
 
-func UserHandlerFunc(proxy *httputil.ReverseProxy, authServ authentication.AuthService) func(w http.ResponseWriter, r *http.Request) {
+func UserHandlerFunc(proxy *httputil.ReverseProxy) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		proxy.ServeHTTP(w, r)
+	}
+}
+
+func LogErrorMessages(receiver *message_receiver.RabbitMQReceiver) {
+	for d := range receiver.ErrorChannel {
+		log.Printf("%s", d.Body)
 	}
 }
